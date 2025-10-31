@@ -1,14 +1,13 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-
 import App from './App.vue'
-import router from './router'
-
-const app = createApp(App)
-
-app.use(createPinia())
+import CategoryComponent from "@/components/CategoryComponent.vue";
+import PosterComponent from "@/components/PosterComponent.vue";
 
 
-app.mount('#app')
+createApp(App)
+  .component("CategoryComponent",CategoryComponent)
+  .component("PosterComponent",PosterComponent)
+  .mount('#app')
+
