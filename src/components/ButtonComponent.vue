@@ -1,16 +1,23 @@
 <script setup lang="ts">
+import type { StyleValue } from 'vue'
 
+interface Props {
+  style?: StyleValue
+  onClick?: () => void
+}
+
+const props = withDefaults(defineProps<Props>(), {})
 </script>
 
 <template>
-  <button class="poster_btt" :style="$attrs.style" v-on:click="$attrs.onclick">
+  <button class="poster_btt" :style="props.style" @click="props.onClick">
     <span class="poster_btt_label">Shop Now</span>
-    <img class="poster_btt_icon" src="/right-arrow.png" alt="Poster image">
+    <img class="poster_btt_icon" src="/right-arrow.png" alt="Poster image" />
   </button>
 </template>
 
 <style scoped>
-.poster_btt{
+.poster_btt {
   height: 40px;
   min-width: 120px;
   align-content: center;
@@ -24,10 +31,9 @@
   border: none;
 }
 
-.poster_btt_icon{
+.poster_btt_icon {
   margin-left: 8px;
   width: 20%;
   height: 20%;
 }
-
 </style>

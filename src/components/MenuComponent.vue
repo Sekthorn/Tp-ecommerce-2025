@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import MenuItemComponent from "@/components/MenuItemComponent.vue";
 
 const props = withDefaults(defineProps<ComponentAttribute>(), {
   label: 'Featured Categories'
@@ -30,14 +31,13 @@ const selectCategory = (category: string) => {
   <div class="featured-container">
     <div class="label-container">{{ props.label }}</div>
     <div class="categories-nav">
-      <button
+      <MenuItemComponent
         v-for="category in categories"
         :key="category"
         :class="['category-btn', { active: activeCategory === category }]"
         @click="selectCategory(category)"
-      >
-        {{ category }}
-      </button>
+        :label="category"
+      />
     </div>
   </div>
 </template>
@@ -59,25 +59,5 @@ const selectCategory = (category: string) => {
 .categories-nav {
   display: flex;
   gap: 10px;
-}
-
-.category-btn {
-  padding: 8px 10px;
-  background-color: transparent;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  color: #7E7E7E;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.category-btn:hover {
-  color: #3BB77E;
-}
-
-.category-btn.active {
-  font-weight: 800;
-  color: black
 }
 </style>

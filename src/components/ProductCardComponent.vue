@@ -1,35 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { EndPoint } from '@/utils/end_point'
-
-export interface ProductCardProps {
-  id: number
-  image: string
-  categoryId: string
-  name: string
-  rating: number
-  price: number
-  promotionAsPercentage?: number
-  size: string
-  instock: number | null
-  countSold: number | null
-  group: string | null
-  createdAt: Date
-  updatedAt: Date
-}
-
-function extract_image(img: string): string {
-  const arr = img.replace(/[\[\]\s]/g, '').split(',')
-  console.log('arr : ' + arr)
-  return arr[0]!.replace('"', '').replace('"', '')
-}
-
-function calculateDiscountedPrice(original: number, discount: number | null): string {
-  return (original - original * (discount ?? 0)).toFixed(2)
-}
+import router from '@/utils/router'
+import type { Product } from '@/models/product'
 
 defineProps<{
-  product: ProductCardProps
+  product: Product
 }>()
 
 const isAdded = ref(false)
@@ -54,15 +30,28 @@ function decreaseQuantity() {
 function increaseQuantity() {
   quantity.value++
 }
+
+const mouseEnter = ref(false)
+
+function setMouseEnter(state: boolean) {
+  mouseEnter.value = state
+}
+
+async function onClick(id: string | number) {
+  if (mouseEnter.value) {
+    return
+  }
+  await router.push({ name: 'product', params: { productId: id } })
+}
 </script>
 
 <template>
-  <div class="product-card">
+  <div class="product-card" @click="onClick(product.id)">
     <div class="product-image">
       <span v-if="product.promotionAsPercentage" class="discount-badge"
         >{{ product.promotionAsPercentage }}%</span
       >
-      <img :src="EndPoint.image_url(extract_image(product.image))" :alt="product.name" />
+      <img :src="EndPoint.image_url(product.singleImg)" :alt="product.name" />
     </div>
     <div class="product-info">
       <!--      <div class="product-brand">{{ product.brand }}</div>-->
@@ -80,11 +69,17 @@ function increaseQuantity() {
       <div class="product-footer">
         <div class="product-price">
           <span class="current-price">${{ product.price.toFixed(2) }}</span>
-          <span v-if="product.promotionAsPercentage" class="original-price"
-            >${{ calculateDiscountedPrice(product.price, product.promotionAsPercentage) }}</span
-          >
+          <span v-if="product.promotionAsPercentage" class="original-price">{{
+            product.discountedPrice
+          }}</span>
         </div>
-        <button v-if="!isAdded || quantity == 0" class="add-to-cart-btn" @click="toggleCart">
+        <button
+          v-if="!isAdded || quantity == 0"
+          class="add-to-cart-btn"
+          @click="toggleCart"
+          @mouseenter="setMouseEnter(true)"
+          @mouseleave="setMouseEnter(false)"
+        >
           Add +
         </button>
         <div v-else class="quantity-selector">

@@ -1,17 +1,17 @@
 <script setup lang="ts">
 
-import ProductContainer from "@/container/ProductContainer.vue";
+import SubHeaderComponent from "@/components/SubHeaderComponent.vue";
+
+
 
 </script>
 
 <template>
 
   <main>
-    <MenuConponent :label="'Featured Categories'"/>
-    <CategoryComponent/>
-    <PromotionComponent/>
-    <MenuConponent :label="'Popular Products'"/>
-    <ProductContainer/>
+    <HeaderComponent/>
+    <SubHeaderComponent/>
+    <router-view/>
   </main>
 </template>
 
@@ -19,28 +19,14 @@ import ProductContainer from "@/container/ProductContainer.vue";
 
 
 
-
 header {
   line-height : 1.5;
 }
 
+
 body  {
   background: white;
+  font-family: Quicksand,serif;
 }
 
-
-@media (min-width : 1024px) {
-  header {
-    display       : flex;
-    place-items   : center;
-    padding-right : calc(var(--section-gap) / 2);
-  }
-
-
-  header .wrapper {
-    display     : flex;
-    place-items : flex-start;
-    flex-wrap   : wrap;
-  }
-}
 </style>

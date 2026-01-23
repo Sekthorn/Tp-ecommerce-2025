@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import {EndPoint} from "@/utils/end_point.js";
 import {useProductStore} from "@/shop/state_mgr.ts";
-import {ProductsManager} from "@/shop/product_mgr.js";
 import {onMounted} from "vue";
 import {CategoryManager} from "@/shop/category_mgr.js";
+import router from "@/utils/router.js";
 
-let category_state: CategoryManager = useProductStore().categories;
+const category_state: CategoryManager = useProductStore().categories;
 
 onMounted(async () => {
   await category_state.load_or_init();
 })
+
+async function onClick(id: string | number) {
+  await router.push({name: "category", params: {categoryId: id}})
+}
 
 </script>
 
@@ -18,6 +22,7 @@ onMounted(async () => {
     <button
       v-for="item in category_state.get_categories()"
       :key="item.id"
+      @click="onClick(item.id)"
       role="menuitem"
       type="button"
       class="category_btt"

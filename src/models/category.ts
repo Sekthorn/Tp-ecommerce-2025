@@ -39,44 +39,19 @@ export class CategoryItem {
     this.group = group
     this.hover_color = random_color.hover
   }
-}
 
-export class CategoryManager {
-  categories: CategoryItem[] = []
-
-  public async load_or_init(): Promise<CategoryManager> {
-    if (this.categories.length === 0) {
-      return this.loadCategories()
-    }
-    return this
+  static get error(): CategoryItem {
+    return new CategoryItem(0, 'Loading Error', 0, '', '', '')
   }
 
-  public async loadCategories(): Promise<CategoryManager> {
+  static async getCategories(id: string | number): Promise<CategoryItem> {
+    let temp = new CategoryItem(0, '', 0, '', '', '')
     try {
-      const response = await fetch(EndPoint.categories)
-      const data = await response.json()
-      this.categories = data.map(
-        (category: any) =>
-          new CategoryItem(
-            category.id,
-            category.name,
-            category.productCount || 0,
-            category.color,
-            category.image || 'imgs/cate_item_1.png',
-            category.group,
-          ),
-      )
-    } catch (error) {
-      console.error('Failed to fetch categories:', error)
+      const res = await fetch(`${EndPoint.categories}/${id}`)
+      temp = await res.json()
+    } catch (e) {
+      console.log(e)
     }
-    return this
-  }
-
-  public get_categories(): CategoryItem[] {
-    return this.categories
-  }
-
-  static new() {
-    return new CategoryManager()
+    return temp
   }
 }

@@ -39,10 +39,7 @@ export class CategoriesController {
 
   @Post()
   @UseInterceptors(FileInterceptor('image', multerOptions))
-  createCategory(
-    @UploadedFile() image: Express.Multer.File,
-    @Body() body: CreateCategoryDto,
-  ): any {
+  createCategory(@UploadedFile() image: Express.Multer.File, @Body() body: CreateCategoryDto): any {
     const category = this.categoryService.create({
       ...body,
       image: image.path,
