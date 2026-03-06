@@ -3,6 +3,7 @@
     <template v-if="status == 'completed'">
       <TodoItem
         v-for="todo of completedTasks"
+        :key="todo.id"
         icon="uil-adobe-alt"
         :todo="todo"
       />
@@ -10,6 +11,7 @@
     <template v-else>
       <TodoItem
         v-for="todo of pendingTasks"
+        :key="todo.id"
         icon="uil-adobe-alt"
         :todo="todo"
       />
